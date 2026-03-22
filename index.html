@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced Password Generator</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .box {
+      background: #1f2937;
+      padding: 25px;
+      border-radius: 15px;
+      width: 340px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    .options {
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .options label {
+      display: block;
+      margin: 5px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #38bdf8;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    .output {
+      margin-top: 15px;
+      background: #111827;
+      padding: 10px;
+      border-radius: 6px;
+      word-break: break-all;
+      min-height: 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 5px;
+    }
+
+    .row button {
+      width: 50%;
+    }
+
+    .strength {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .weak { color: #ef4444; }
+    .medium { color: #f59e0b; }
+    .strong { color: #22c55e; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2> Password Generator</h2>
+
+  <input type="number" id="length" placeholder="Password length (e.g. 10)">
+
+  <div class="options">
+    <label><input type="checkbox" id="upper" checked> Uppercase</label>
+    <label><input type="checkbox" id="nums" checked> Numbers</label>
+    <label><input type="checkbox" id="symbols" checked> Symbols</label>
+  </div>
+
+  <button onclick="generatePassword()">Generate Password</button>
+
+  <div class="output" id="output"></div>
+
+  <div class="row">
+    <button onclick="copyPassword()">Copy</button>
+    <button onclick="generatePassword()">Regenerate</button>
+  </div>
+
+  <div class="strength" id="strength"></div>
+</div>
+
+<script>
+function generatePassword() {
+  const length = document.getElementById("length").value || 10;
+
+  let chars = "abcdefghijklmnopqrstuvwxyz";
+
+  if (document.getElementById("upper").checked)
+    chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  if (document.getElementById("nums").checked)
+    chars += "0123456789";
+
+  if (document.getElementById("symbols").checked)
+    chars += "!@#$%^&*()_+[]{}<>?/";
+
+  let password = "";
+
+  for (let i = 0; i < length; i++) {
+    password += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  document.getElementById("output").innerText = password;
+
+  checkStrength(password);
+}
+
+function copyPassword() {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Password copied!");
+}
+
+function checkStrength(pwd) {
+  let strength = "";
+  let cls = "";
+
+  if (pwd.length < 8) {
+    strength = "Weak";
+    cls = "weak";
+  } else if (pwd.length < 12) {
+    strength = "Medium";
+    cls = "medium";
+  } else {
+    strength = "Strong";
+    cls = "strong";
+  }
+
+  document.getElementById("strength").innerHTML =
+    `Strength: <span class="${cls}">${strength}</span>`;
+}
+</script>
+
+</body>
+</html>
